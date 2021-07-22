@@ -1,300 +1,298 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CRUD Application using JavaScript</title>
-    <style>
-        table 
-        {
-            width: 100%;
-        }
-        table, th, td 
-        {
-            border: solid 1px #DDD;
-            border-collapse: collapse;
-            padding: 2px 3px;
-            text-align: center;
-        }
-      
-        input[type='button'] 
-        {
-            cursor: pointer;
-            border: none;
-            color: #FFF;
-        }
-        
-        input[type='text'], select 
-        {
-            text-align: center;
-            border: solid 1px #CCC;
-            width: auto;
-            padding: 2px 3px;
-        }
-    </style>
+    <title>Frontend helpers</title>
+
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+      <link rel="icon" src="/img/favicon.ico" type="image/x-icon">
+
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+
+
 </head>
 <body>
-    <!--Show the app here.-->
-    <div id="container" style="width:700px;"></div>
+
+    <div class="container"><!-- main content -->
+
+        <h1 class="mt-5 mb-5">Frontend helper functions</h1>
+
+
+        <div class="card">
+            <h2 class="card-header">CRUD table</h2>
+            <div class="card-body">
+                <div id="crudTableContainer" style="width:100%;"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+   <!-- plotly.js -->
+   <script src='https://cdn.plot.ly/plotly-2.2.0.min.js'></script>
+
+
+
+
+
 </body>
 
+
+
 <script>
+
+
+
     var crudApp = new function () {
 
-        // An array of JSON objects with values.
-        this.myBooks = [
-            { ID: '1', Book_Name: 'Computer Architecture', Category: 'Computers', Price: 125.60 },
-            { ID: '2', Book_Name: 'Asp.Net 4 Blue Book', Category: 'Programming', Price: 56.00 },
-            { ID: '3', Book_Name: 'Popular Science', Category: 'Science', Price: 210.40 }
-        ]
+        // An array of JSON objects with values
+        this.tableData = [
+            {Name: 'methanol', Role: 'solvent', Amount: 125, units: 'mL'},
+            {Name: 'styrene', Role: 'monomer', Amount: 4.2, units: 'mg'},
+            {Name: 'DMF', Role: 'solvent', Amount: 10, units: 'mL'},
+        ];
 
-        this.category = ['Business', 'Computers', 'Programming', 'Science'];
-        this.col = [];
+
+        this.inputInfo = [
+            {name: 'Name', type: 'text'}, 
+            {name: 'Role', type: 'select', options: ['monomer', 'solvent', 'catalyst', 'polymer']},
+            {name: 'Amount', type: 'number'},
+            {name: 'units', type: 'select', options: ['L', 'mL', 'g', 'mg']},
+        ];
+
+
+
+        // get array of table input types and column names
+        this.inputTypes = Array.from({length: this.inputInfo.length}, (_, i) => this.inputInfo[i].type);
+        this.colNames = Array.from({length: this.inputInfo.length}, (_, i) => this.inputInfo[i].name);
+
 
         this.createTable = function () {
 
-            // Extract value for table header.
-            for (var i = 0; i < this.myBooks.length; i++) {
-                for (var key in this.myBooks[i]) {
-                    if (this.col.indexOf(key) === -1) {
-                        this.col.push(key);
-                    }
-                }
-            }
-
-            // CREATE A TABLE.
+            // create the table
             var table = document.createElement('table');
-            table.setAttribute('id', 'booksTable');     // Seet table id.
+            table.setAttribute('id', 'crudTable');
 
-            var tr = table.insertRow(-1);               // Create a row (for header).
+            // create a row for the headers
+            var tr = table.insertRow(-1);
+            //tr.classList.add('table-primary');
 
-            for (var h = 0; h < this.col.length; h++) {
-                // Add table header.
+            // add headers to the table
+            for (let h = 0; h < this.colNames.length; h++) {
                 var th = document.createElement('th');
-                th.innerHTML = this.col[h].replace('_', ' ');
+                th.innerHTML = this.colNames[h].replace('_', ' ');
                 tr.appendChild(th);
             }
 
-            // Add rows using JSON data.
-            for (var i = 0; i < this.myBooks.length; i++) {
-
-                tr = table.insertRow(-1);           // Create a new row.
-
-                for (var j = 0; j < this.col.length; j++) {
+            // add rows from JSON data
+            for (var i = 0; i < this.tableData.length; i++) {
+                // create new row
+                tr = table.insertRow(-1);           
+                // create new cells in row
+                for (var j = 0; j < this.colNames.length; j++) {
                     var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = this.myBooks[i][this.col[j]];
+                    tabCell.innerHTML = this.tableData[i][this.colNames[j]];
                 }
 
-                // Dynamically create and add elements to table cells with events.
+                // create CRUD buttons in table row
 
+                // create new cell
                 this.td = document.createElement('td');
 
-                // *** CANCEL OPTION.
+                // save button
                 tr.appendChild(this.td);
-                var lblCancel = document.createElement('label');
-                lblCancel.innerHTML = '✖';
-                lblCancel.setAttribute('onclick', 'crudApp.Cancel(this)');
-                lblCancel.setAttribute('style', 'display:none;');
-                lblCancel.setAttribute('title', 'Cancel');
-                lblCancel.setAttribute('id', 'lbl' + i);
-                this.td.appendChild(lblCancel);
-
-                // *** SAVE.
-                tr.appendChild(this.td);
-                var btSave = document.createElement('input');
-
-                btSave.setAttribute('type', 'button');      // SET ATTRIBUTES.
-                btSave.setAttribute('value', 'Save');
-                btSave.setAttribute('id', 'Save' + i);
+                var btSave = document.createElement('button');
+                btSave.innerHTML = '<i class="bi bi-check-lg"></i>';
+                btSave.setAttribute('id', 'save' + i);
                 btSave.setAttribute('style', 'display:none;');
-                btSave.setAttribute('onclick', 'crudApp.Save(this)');       // ADD THE BUTTON's 'onclick' EVENT.
+                btSave.setAttribute('onclick', 'crudApp.Save(this)');
+                btSave.classList.add('btn', 'btn-sm', 'btn-warning');
                 this.td.appendChild(btSave);
 
-                // *** UPDATE.
+                // edit button
                 tr.appendChild(this.td);
-                var btUpdate = document.createElement('input');
-
-                btUpdate.setAttribute('type', 'button');    // SET ATTRIBUTES.
-                btUpdate.setAttribute('value', 'Update');
-                btUpdate.setAttribute('id', 'Edit' + i);
-                btUpdate.setAttribute('style', 'background-color:#44CCEB;');
-                btUpdate.setAttribute('onclick', 'crudApp.Update(this)');   // ADD THE BUTTON's 'onclick' EVENT.
+                var btUpdate = document.createElement('button');
+                btUpdate.innerHTML = '<i class="bi bi-pencil"></i>';
+                btUpdate.setAttribute('id', 'edit' + i);
+                btUpdate.setAttribute('onclick', 'crudApp.Update(this)');
+                btUpdate.classList.add('btn', 'btn-sm', 'btn-primary');
+                btUpdate.classList.add("btn-sm");
+                btUpdate.classList.add("btn-primary");
                 this.td.appendChild(btUpdate);
 
-                // *** DELETE.
+
+                // delete button
                 this.td = document.createElement('th');
                 tr.appendChild(this.td);
-                var btDelete = document.createElement('input');
-                btDelete.setAttribute('type', 'button');    // SET INPUT ATTRIBUTE.
-                btDelete.setAttribute('value', 'Delete');
-                btDelete.setAttribute('style', 'background-color:#ED5650;');
-                btDelete.setAttribute('onclick', 'crudApp.Delete(this)');   // ADD THE BUTTON's 'onclick' EVENT.
+                var btDelete = document.createElement('button');
+                btDelete.innerHTML = '<i class="bi bi-x-lg"></i>';
+                btDelete.setAttribute('onclick', 'crudApp.Delete(this)');
+                btDelete.classList.add("btn");
+                btDelete.classList.add("btn-sm");
+                btDelete.classList.add("btn-danger");
                 this.td.appendChild(btDelete);
-            }
+            }; // end loop over rows to populate table
 
 
-            // ADD A ROW AT THE END WITH BLANK TEXTBOXES AND A DROPDOWN LIST (FOR NEW ENTRY).
+            // add a row to the table for new entries
+            tr = table.insertRow(1);
 
-            tr = table.insertRow(-1);           // CREATE THE LAST ROW.
-
-            for (var j = 0; j < this.col.length; j++) {
+            // loop over each column and fill empty row with inputs
+            for (var j = 0; j < this.colNames.length; j++) {
                 var newCell = tr.insertCell(-1);
-                if (j >= 1) {
 
-                    if (j == 2) {   // WE'LL ADD A DROPDOWN LIST AT THE SECOND COLUMN (FOR Category).
-
-                        var select = document.createElement('select');      // CREATE AND ADD A DROPDOWN LIST.
-                        select.innerHTML = '<option value=""></option>';
-                        for (k = 0; k < this.category.length; k++) {
-                            select.innerHTML = select.innerHTML +
-                                '<option value="' + this.category[k] + '">' + this.category[k] + '</option>';
-                        }
-                        newCell.appendChild(select);
+                if (this.inputTypes[j] === 'select') {
+                    var input = document.createElement('select');
+                    for (si = 0; si < this.inputInfo[j].options.length; si++) {
+                        input.innerHTML = input.innerHTML +
+                            '<option value="' + this.inputInfo[j].options[si] + '">' + this.inputInfo[j].options[si] + '</option>';
                     }
-                    else {
-                        var tBox = document.createElement('input');          // CREATE AND ADD A TEXTBOX.
-                        tBox.setAttribute('type', 'text');
-                        tBox.setAttribute('value', '');
-                        newCell.appendChild(tBox);
-                    }
+                    input.classList.add('form-control');
                 }
-            }
+                else if (this.inputTypes[j] === 'text' || this.inputTypes[j] === 'number') {
+                    var input = document.createElement('input');
+                    input.classList.add('form-control');
+                    input.setAttribute('type', this.inputTypes[j]);
+                    //input.setAttribute('value', '');
+                    newCell.appendChild(input);
+                }
+                else {
+                    alert('NOT A VALID INPUT TYPE');
+                };
+                newCell.appendChild(input);
+
+            };
 
             this.td = document.createElement('td');
             tr.appendChild(this.td);
 
-            var btNew = document.createElement('input');
-
-            btNew.setAttribute('type', 'button');       // SET ATTRIBUTES.
-            btNew.setAttribute('value', 'Create');
+            var btNew = document.createElement('button');
+            btNew.innerHTML = '<i class="bi bi-plus-lg"></i>';
             btNew.setAttribute('id', 'New' + i);
-            btNew.setAttribute('style', 'background-color:#207DD1;');
-            btNew.setAttribute('onclick', 'crudApp.CreateNew(this)');       // ADD THE BUTTON's 'onclick' EVENT.
+            btNew.setAttribute('onclick', 'crudApp.CreateNew(this)');
+            btNew.classList.add('btn', 'btn-sm', 'btn-primary');
             this.td.appendChild(btNew);
 
-            var div = document.getElementById('container');
+            // add table to the page
+            var div = document.getElementById('crudTableContainer');
             div.innerHTML = '';
-            div.appendChild(table);    // ADD THE TABLE TO THE WEB PAGE.
-        };
+            table.classList.add('table', 'table-borderless', 'table-sm');
+            //table.style.fontSize = '12px';
+            div.appendChild(table);
 
-        // ****** OPERATIONS START.
-
-        // CANCEL.
-        this.Cancel = function (oButton) {
-
-            // HIDE THIS BUTTON.
-            oButton.setAttribute('style', 'display:none; float:none;');
-
-            var activeRow = oButton.parentNode.parentNode.rowIndex;
-
-            // HIDE THE SAVE BUTTON.
-            var btSave = document.getElementById('Save' + (activeRow - 1));
-            btSave.setAttribute('style', 'display:none;');
-
-            // SHOW THE UPDATE BUTTON AGAIN.
-            var btUpdate = document.getElementById('Edit' + (activeRow - 1));
-            btUpdate.setAttribute('style', 'display:block; margin:0 auto; background-color:#44CCEB;');
-
-            var tab = document.getElementById('booksTable').rows[activeRow];
-
-            for (i = 0; i < this.col.length; i++) {
-                var td = tab.getElementsByTagName("td")[i];
-                td.innerHTML = this.myBooks[(activeRow - 1)][this.col[i]];
-            }
-        }
-
-
-        // EDIT DATA.
-        this.Update = function (oButton) {
-            var activeRow = oButton.parentNode.parentNode.rowIndex;
-            var tab = document.getElementById('booksTable').rows[activeRow];
-
-            // SHOW A DROPDOWN LIST WITH A LIST OF CATEGORIES.
-            for (i = 1; i < 4; i++) {
-                if (i == 2) {
-                    var td = tab.getElementsByTagName("td")[i];
-                    var ele = document.createElement('select');      // DROPDOWN LIST.
-                    ele.innerHTML = '<option value="' + td.innerText + '">' + td.innerText + '</option>';
-                    for (k = 0; k < this.category.length; k++) {
-                        ele.innerHTML = ele.innerHTML +
-                            '<option value="' + this.category[k] + '">' + this.category[k] + '</option>';
-                    }
-                    td.innerText = '';
-                    td.appendChild(ele);
-                }
-                else {
-                    var td = tab.getElementsByTagName("td")[i];
-                    var ele = document.createElement('input');      // TEXTBOX.
-                    ele.setAttribute('type', 'text');
-                    ele.setAttribute('value', td.innerText);
-                    td.innerText = '';
-                    td.appendChild(ele);
-                }
-            }
-
-            var lblCancel = document.getElementById('lbl' + (activeRow - 1));
-            lblCancel.setAttribute('style', 'cursor:pointer; display:block; width:20px; float:left; position: absolute;');
-
-            var btSave = document.getElementById('Save' + (activeRow - 1));
-            btSave.setAttribute('style', 'display:block; margin-left:30px; float:left; background-color:#2DBF64;');
-
-            // HIDE THIS BUTTON.
-            oButton.setAttribute('style', 'display:none;');
         };
 
 
-        // DELETE DATA.
-        this.Delete = function (oButton) {
-            var activeRow = oButton.parentNode.parentNode.rowIndex;
-            this.myBooks.splice((activeRow - 1), 1);    // DELETE THE ACTIVE ROW.
-            this.createTable();                         // REFRESH THE TABLE.
-        };
 
-        // SAVE DATA.
-        this.Save = function (oButton) {
-            var activeRow = oButton.parentNode.parentNode.rowIndex;
-            var tab = document.getElementById('booksTable').rows[activeRow];
 
-            // UPDATE myBooks ARRAY WITH VALUES.
-            for (i = 1; i < this.col.length; i++) {
-                var td = tab.getElementsByTagName("td")[i];
-                if (td.childNodes[0].getAttribute('type') == 'text' || td.childNodes[0].tagName == 'SELECT') {  // CHECK IF ELEMENT IS A TEXTBOX OR SELECT.
-                    this.myBooks[(activeRow - 1)][this.col[i]] = td.childNodes[0].value;      // SAVE THE VALUE.
-                }
-            }
-            this.createTable();     // REFRESH THE TABLE.
-        }
-
-        // CREATE NEW.
-        this.CreateNew = function (oButton) {
-            var activeRow = oButton.parentNode.parentNode.rowIndex;
-            var tab = document.getElementById('booksTable').rows[activeRow];
+        // when create new row button is clicked
+        this.CreateNew = function (b) {
+            var activeRow = b.parentNode.parentNode.rowIndex;
+            var tab = document.getElementById('crudTable').rows[activeRow];
             var obj = {};
 
-            // ADD NEW VALUE TO myBooks ARRAY.
-            for (i = 1; i < this.col.length; i++) {
+            // add new values to data
+            for (i = 0; i <= this.colNames.length; i++) {
                 var td = tab.getElementsByTagName("td")[i];
-                if (td.childNodes[0].getAttribute('type') == 'text' || td.childNodes[0].tagName == 'SELECT') {      // CHECK IF ELEMENT IS A TEXTBOX OR SELECT.
-                    var txtVal = td.childNodes[0].value;
-                    if (txtVal != '') {
-                        obj[this.col[i]] = txtVal.trim();
+
+                var val = td.childNodes[0].value;
+                obj[this.colNames[i]] = val.trim();
+
+            };
+            if (Object.keys(obj).length > 0) {
+                this.tableData.unshift(obj);
+                this.createTable();
+            };
+
+        };
+
+
+
+
+
+
+        // when delete button is clicked
+        this.Delete = function (b) {
+            var activeRow = b.parentNode.parentNode.rowIndex;
+            this.tableData.splice((activeRow - 2), 1);
+            this.createTable();
+        };
+
+
+        // when save row button is clicked
+        this.Save = function (b) {
+            var activeRow = b.parentNode.parentNode.rowIndex;
+            var tab = document.getElementById('crudTable').rows[activeRow];
+            // update row with new values
+            for (i = 0; i < this.colNames.length; i++) {
+                var td = tab.getElementsByTagName("td")[i];
+                this.tableData[(activeRow - 2)][this.colNames[i]] = td.childNodes[0].value;
+            }
+            this.createTable();
+        };
+
+
+
+
+        // when edit button is clicked
+        this.Update = function (b) {
+            var activeRow = b.parentNode.parentNode.rowIndex;
+            var tab = document.getElementById('crudTable').rows[activeRow];
+
+            // populate the row with input fields
+            for (j = 0; j < this.colNames.length; j++) {
+
+                if (this.inputTypes[j] === 'select') {
+
+                    var td = tab.getElementsByTagName("td")[j];
+                    var input = document.createElement('select');
+                    input.classList.add('form-control');
+                    input.innerHTML = '<option value="' + td.innerText + '">' + td.innerText + '</option>';
+
+                    for (si = 0; si < this.inputInfo[j].options.length; si++) {
+                        input.innerHTML = input.innerHTML +
+                            '<option value="' + this.inputInfo[j].options[si] + '">' + this.inputInfo[j].options[si] + '</option>';
                     }
-                    else {
-                        obj = '';
-                        alert('all fields are compulsory');
-                        break;
-                    }
+
+                    td.innerText = '';
+                    td.appendChild(input);
                 }
-            }
-            obj[this.col[0]] = this.myBooks.length + 1;     // NEW ID.
 
-            if (Object.keys(obj).length > 0) {      // CHECK IF OBJECT IS NOT EMPTY.
-                this.myBooks.push(obj);             // PUSH (ADD) DATA TO THE JSON ARRAY.
-                this.createTable();                 // REFRESH THE TABLE.
-            }
-        }
+                else if (this.inputTypes[j] === 'text' || this.inputTypes[j] === 'number') {
 
-        // ****** OPERATIONS END.
-    }
+                    var td = tab.getElementsByTagName("td")[j];
+                    var input = document.createElement('input');
+                    input.classList.add('form-control');
+                    input.setAttribute('type', this.inputTypes[j]);
+                    input.setAttribute('value', td.innerText);
+                    td.innerText = '';
+                    td.appendChild(input);
 
-    crudApp.createTable();
+                }
+                else {
+                    alert('NOT A VALID INPUT TYPE');
+                };
+
+            };
+
+            var btSave = document.getElementById('save' + (activeRow - 2));
+            btSave.setAttribute('style', 'display:block;');
+            b.setAttribute('style', 'display:none;');
+
+        }; // end of CRUD operations
+    };
+
+    crudApp.createTable('hi');
 </script>
 </html>
+
+

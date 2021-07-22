@@ -1,2 +1,3 @@
 # web-helpers
-helper functions used for frontend web design
+
+Helper functions and boilerplate code used for building simple frontend web applications with HTML, Bootstrap and Javascript.
