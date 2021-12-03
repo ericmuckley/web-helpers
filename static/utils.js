@@ -35,18 +35,36 @@ function addToFront(arr, el){
 };
 
 
-// format a label for display by capitalizing the
-// first letter and replacing underscores with spaces
-function formatLabel(label, capitalize=true){
-    if (label === ''){
-        return '';
-    } else {
-        if (capitalize){
-            label = label.charAt(0).toUpperCase() + label.slice(1);
-        };
-    return label.replace('_', ' ').replace('-', ' ');
-    };
+// Format a label for display by capitalizing the
+// first letter and replacing underscores with spaces.
+// use the "mapping" argument object to map specific labels
+// to new ones.
+function formatLabels(labels, mapping={}){
+    var new_labels = [];
+    for (let label of labels) {
+        var new_label = null;
+        if (mapping.hasOwnProperty(label)) {
+            new_label = mapping[label];
+        } else {
+	        if (label === '') {
+		        new_label = '';
+	        } else {
+	            new_label = (label.charAt(0).toUpperCase() + label.slice(1));
+	            new_label = new_label.replace('_', ' ');
+	        };
+	    };
+	    new_labels.push(new_label);
+	};
+	return new_labels;
 };
+
+
+
+
+
+
+
+
 
 
 // Create a bootstrap row with multiple columns.
@@ -108,5 +126,41 @@ function removeRow(){
     // delete row
     tr.parentNode.removeChild(tr);
 };
+
+
+
+
+
+
+
+
+
+
+
+// Create a bootstrap card from a config object
+function createCard(config={"img": true, "header": true, "body": true, "footer": true}) {
+    var cardObj = {};
+    var card = document.createElement("div");
+    card.classList.add("card");
+    cardObj['card'] = card;
+    if (config['img']) {
+        var img = document.createElement('img');
+        img.classList.add('card-img-top');
+        card.appendChild(img);
+        cardObj['img'] = img;
+    };
+    for (let key of ['header', 'body', 'footer']){
+        if (config[key]) {
+            var div = document.createElement("div");
+            div.classList.add('card-' + key);
+            card.appendChild(div);
+            cardObj[key] = div;
+        };
+    };
+    return cardObj;
+};
+
+
+
 
 
