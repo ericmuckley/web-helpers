@@ -35,7 +35,7 @@ function addToFront(arr, el){
 };
 
 
-// Format a label for display by capitalizing the
+// Format an array of strings by capitalizing the
 // first letter and replacing underscores with spaces.
 // use the "mapping" argument object to map specific labels
 // to new ones.
@@ -58,6 +58,12 @@ function formatLabels(labels, mapping={}){
 	return new_labels;
 };
 
+
+// convert a string to a valid ID by lowercasing and
+// replacing spaces with hyphens.
+function strToId(str){
+    return str.toLowerCase().replaceAll(' ', '-');
+}
 
 
 
@@ -163,4 +169,50 @@ function createCard(config={"img": true, "header": true, "body": true, "footer":
 
 
 
+
+
+// POST method implementation.
+// Use it like this:
+// postData(url='/my-url', data={"my": "data"}).then(r => {console.log(r)});
+async function postData(url='', data={}) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    return response.json();
+};
+
+
+
+// add a bootstrap spinner to a parent div
+function addSpinner(parentDiv, color='primary', size=null){
+    const spinner = document.createElement('div');
+    spinner.classList.add('mx-2', 'spinner', 'spinner-border', `text-${color}`);
+    if (size !== null){
+        spinner.classList.add(`spinner-border-${size}`);
+    };
+    document.getElementById(parentDiv).appendChild(spinner);
+};
+// remove bootstrap spinner from a parent div
+function removeSpinner(parentDiv){
+    const spinners = document.getElementById(parentDiv).getElementsByClassName("spinner");
+    for(const s of spinners){
+        s.remove()
+    };
+};
+
+
+
+// make search disable search button when no search is present
+document.getElementById("query-input").addEventListener("input", function(){
+    const q = document.getElementById("query-input");
+    const s = document.getElementById("search-btn");
+    if (q.value === ''){
+        s.disabled = true;
+    } else {
+        s.disabled = false;
+    };
+});
+          
 
