@@ -89,7 +89,27 @@ function createRowCols(parentdiv, ncols=2) {
 
 
 
-
+// create a select input using an array of options
+function createSelect(options, label='', id='', parentId=''){
+    var select = document.createElement("select");
+    select.classList.add('form-select');
+    if (id !== ''){
+        select.id = id
+    };
+    if (label !== '' && parentId !== ''){
+        document.getElementById(parentId).innerHTML += `<label class="form-label">${label}</label>`;
+    };
+    if (parentId !== ''){
+        document.getElementById(parentId).appendChild(select)
+    };
+    for (let op of options){
+        var option = document.createElement("option");
+        option.value = strToId(op);
+        option.text = op
+        select.appendChild(option);
+    };
+    return select;
+};
 
 
 // Create a table with headers and body.
