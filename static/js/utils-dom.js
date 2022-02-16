@@ -14,7 +14,7 @@ const dom = {
   },
 
 
-  make (type="div", info={}) {
+  make (tag="div", info={}) {
     /*
     Make a DOM element.
     Inputs:
@@ -27,9 +27,10 @@ const dom = {
       'parent': 'parent_id',
       'datasets': {"dataset1": "hello", "dataset2": [1,2,3]}
     }
-    Output: element which was created
+    Output: element which was created.
+    If created element is a table, output is [table, thead, tbody]
     */
-    const el = document.createElement(type);
+    const el = document.createElement(tag);
     for (const [k, v] of Object.entries(info)) {
       if (k === "styles") {
         Object.assign(el.style, v);
@@ -49,15 +50,21 @@ const dom = {
         };
       } else if (k === "innerHTML") {
         el.innerHTML = v;
-      } else if (k === "value") {
-        el.value = v;
-      } else if (['id', 'name', 'type', 'href', 'target'].includes(k)) {
+      } else if (['id', 'name', 'type', 'href', 'target', 'text', 'value'].includes(k)) {
         el.setAttribute(k, v);
       } else {
         alert(`No action performed for new component with info key: ${k}`);
       };
     };
-    return el;
+    if (tag === "table") {
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
+      el.appendChild(thead);
+      el.appendChild(tbody);
+      return [el, thead, tbody];
+    } else {
+      return el;
+    };
   },
 
 };
