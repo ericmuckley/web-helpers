@@ -1,375 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Frontend helpers</title>
+<!doctype html>
+<html lang="en">
 
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <head>
+        <title>Web-helpers</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/css/bootstrap-icons.css">
+        <link rel="stylesheet" href="static/css/styles.css">
+    </head>
 
-      <link rel="icon" src="/img/favicon.ico" type="image/x-icon">
+    <body>
 
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-
-      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
-
-
-
-</head>
-<body>
-
-    <div class="container"><!-- main content -->
-
-        <h1 class="mt-5 mb-5">Frontend helper functions</h1>
-
-
-        <div class="card">
-            <h2 class="card-header">CRUD table</h2>
-            <div class="card-body">
-                <div id="crudTableContainer" style="width:100%;"></div>
+        <main>
+            <div id="root">
             </div>
-        </div>
+        </main>
 
+        <script src="static/js/d3.min.js"></script>
+        <script src="static/js/plotly-latest.min.js"></script>
+        <script src="static/js/bootstrap.bundle.min.js"></script>
+        
+        <script src="static/js/plotly_utils.js"></script>
 
-        <div class="card mt-3">
-            <h2 class="card-header">Sortable table</h2>
-            <div class="card-body">
-                <div id="sortableTableContainer" style="width:100%;">
-                    
+        <script src="static/js/utils-dom.js"></script>
 
-                    <table id="sampleTable" class="table table-hover table-sm table-borderless">
-                        <thead>
-                            <tr class="primary">
-                                <th>title-1</th>
-                                <th>title-2</th>
-                                <th>title-3</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>data-1</td>
-                                <td>data-2</td>
-                                <td>data-3</td>
-                            </tr>
-                            <tr>
-                                <td>aaa</td>
-                                <td>bbb</td>
-                                <td>ccc</td>
-                            </tr>
-                        </tbody>
-                    </table>
 
+        <script>
 
-                </div>
-            </div>
-        </div>
+            console.log(dom.get('root'));
 
+            var div = dom.make("div", {
+                parent:'root',
+                classes: ['text-center'],
+                styles: {"padding": "100px", "margin": '20px', "border": '1px solid black', 'border-radius': '10px'},
+            }); 
 
+            dom.make("button", {
+                parent: div,
+                id:"my-btn2",
+                classes: ['btn', 'btn-danger'],
+                type: 'button',
+                styles: {"margin": "20px", "font-weight": 'bold'},
+                innerHTML: "click me!!",
+            });
 
+            console.log(dom.get('my-btn'))
 
-    </div>
+        </script>
 
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-   <!-- plotly.js -->
-   <script src='https://cdn.plot.ly/plotly-2.2.0.min.js'></script>
-
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-
-
-
-</body>
-
-
-
-<script>
-
-
-
-    var crudApp = new function () {
-
-        // An array of JSON objects with values
-        this.tableData = [
-            {Name: 'methanol', Role: 'solvent', Amount: 125, units: 'mL'},
-            {Name: 'styrene', Role: 'monomer', Amount: 4.2, units: 'mg'},
-            {Name: 'DMF', Role: 'solvent', Amount: 10, units: 'mL'},
-        ];
-
-
-        this.inputInfo = [
-            {name: 'Name', type: 'text'}, 
-            {name: 'Role', type: 'select', options: ['monomer', 'solvent', 'catalyst', 'polymer']},
-            {name: 'Amount', type: 'number'},
-            {name: 'units', type: 'select', options: ['L', 'mL', 'g', 'mg']},
-        ];
-
-
-
-        // get array of table input types and column names
-        this.inputTypes = Array.from({length: this.inputInfo.length}, (_, i) => this.inputInfo[i].type);
-        this.colNames = Array.from({length: this.inputInfo.length}, (_, i) => this.inputInfo[i].name);
-
-
-        this.createTable = function () {
-
-            // create the table
-            var table = document.createElement('table');
-            table.setAttribute('id', 'crudTable');
-
-            // create a row for the headers
-            //var thead = table.insertRow(-1);
-            var header = table.createTHead();
-            var headerRow = header.insertRow(0);
-            //headerRow.classList.add('table-primary');
-
-            // add headers to the table
-            for (let h = 0; h < this.colNames.length; h++) {
-                var th = document.createElement('th');
-                th.innerHTML = this.colNames[h].replace('_', ' ');
-                headerRow.appendChild(th);
-            }
-            // add emmpty header so number of columns match body
-            var th = document.createElement('th');
-            th.innerHTML = "hi";
-            headerRow.appendChild(th);
-            var th = document.createElement('th');
-            th.innerHTML = "hi";
-            headerRow.appendChild(th);
-
-
-            tbody = document.createElement("tbody");
-
-
-            // add rows from JSON data
-            for (var i = 0; i < this.tableData.length; i++) {
-                // create new row
-                //tr = table.insertRow(-1);   
-                tr = tbody.insertRow(-1);           
-                // create new cells in row
-                for (var j = 0; j < this.colNames.length; j++) {
-                    var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = this.tableData[i][this.colNames[j]];
-                }
-
-                // create CRUD buttons in table row
-
-                // create new cell
-                this.td = document.createElement('td');
-
-                // save button
-                tr.appendChild(this.td);
-                var btSave = document.createElement('button');
-                btSave.innerHTML = '<i class="bi bi-check-lg"></i>';
-                btSave.setAttribute('id', 'save' + i);
-                btSave.setAttribute('style', 'display:none;');
-                btSave.setAttribute('onclick', 'crudApp.Save(this)');
-                btSave.classList.add('btn', 'btn-sm', 'btn-warning');
-                this.td.appendChild(btSave);
-
-                // edit button
-                tr.appendChild(this.td);
-                var btUpdate = document.createElement('button');
-                btUpdate.innerHTML = '<i class="bi bi-pencil"></i>';
-                btUpdate.setAttribute('id', 'edit' + i);
-                btUpdate.setAttribute('onclick', 'crudApp.Update(this)');
-                btUpdate.classList.add('btn', 'btn-sm', 'btn-primary');
-                btUpdate.classList.add("btn-sm");
-                btUpdate.classList.add("btn-primary");
-                this.td.appendChild(btUpdate);
-
-
-                // delete button
-                this.td = document.createElement('th');
-                tr.appendChild(this.td);
-                var btDelete = document.createElement('button');
-                btDelete.innerHTML = '<i class="bi bi-trash"></i>';
-                btDelete.setAttribute('onclick', 'crudApp.Delete(this)');
-                btDelete.classList.add("btn");
-                btDelete.classList.add("btn-sm");
-                btDelete.classList.add("btn-danger");
-                this.td.appendChild(btDelete);
-            }; // end loop over rows to populate table
-
-
-
-
-
-            // add a row to the table for new entries
-            tr = table.insertRow(0);
-
-            // loop over each column and fill empty row with inputs
-            for (var j = 0; j < this.colNames.length; j++) {
-                var newCell = tr.insertCell(-1);
-
-                if (this.inputTypes[j] === 'select') {
-                    var input = document.createElement('select');
-                    for (si = 0; si < this.inputInfo[j].options.length; si++) {
-                        input.innerHTML = input.innerHTML +
-                            '<option value="' + this.inputInfo[j].options[si] + '">' + this.inputInfo[j].options[si] + '</option>';
-                    }
-                    input.classList.add('form-control');
-                }
-                else if (this.inputTypes[j] === 'text' || this.inputTypes[j] === 'number') {
-                    var input = document.createElement('input');
-                    input.classList.add('form-control');
-                    input.setAttribute('type', this.inputTypes[j]);
-                    //input.setAttribute('value', '');
-                    newCell.appendChild(input);
-                }
-                else {
-                    alert('NOT A VALID INPUT TYPE');
-                };
-                newCell.appendChild(input);
-
-            };
-
-            this.td = document.createElement('td');
-            tr.appendChild(this.td);
-
-            var btNew = document.createElement('button');
-            btNew.innerHTML = '<i class="bi bi-plus-lg"></i>';
-            btNew.setAttribute('id', 'New' + i);
-            btNew.setAttribute('onclick', 'crudApp.CreateNew(this)');
-            btNew.classList.add('btn', 'btn-sm', 'btn-primary');
-            this.td.appendChild(btNew);
-
-            // add empty td to make sure each row has same nuumber of td's
-            var td = document.createElement('td');
-            td.innerHTML = "hi";
-            tr.appendChild(td);
-
-
-
-
-
-
-            // add table to the page
-            var div = document.getElementById('crudTableContainer');
-            div.innerHTML = '';
-            table.classList.add('table', 'table-borderless', 'table-sm');
-            //table.style.fontSize = '12px';
-            div.appendChild(table);
-
-
-
-        };
-
-
-
-
-        // when create new row button is clicked
-        this.CreateNew = function (b) {
-            var activeRow = b.parentNode.parentNode.rowIndex;
-            var tab = document.getElementById('crudTable').rows[activeRow];
-            var obj = {};
-
-            // add new values to data
-            for (i = 0; i <= this.colNames.length; i++) {
-                var td = tab.getElementsByTagName("td")[i];
-
-                var val = td.childNodes[0].value;
-                obj[this.colNames[i]] = val.trim();
-
-            };
-            if (Object.keys(obj).length > 0) {
-                this.tableData.unshift(obj);
-                this.createTable();
-            };
-
-        };
-
-
-
-
-
-
-        // when delete button is clicked
-        this.Delete = function (b) {
-            var activeRow = b.parentNode.parentNode.rowIndex;
-            this.tableData.splice((activeRow - 2), 1);
-            this.createTable();
-        };
-
-
-        // when save row button is clicked
-        this.Save = function (b) {
-            var activeRow = b.parentNode.parentNode.rowIndex;
-            var tab = document.getElementById('crudTable').rows[activeRow];
-            // update row with new values
-            for (i = 0; i < this.colNames.length; i++) {
-                var td = tab.getElementsByTagName("td")[i];
-                this.tableData[(activeRow - 2)][this.colNames[i]] = td.childNodes[0].value;
-            }
-            this.createTable();
-        };
-
-
-
-
-        // when edit button is clicked
-        this.Update = function (b) {
-            var activeRow = b.parentNode.parentNode.rowIndex;
-            var tab = document.getElementById('crudTable').rows[activeRow];
-
-            // populate the row with input fields
-            for (j = 0; j < this.colNames.length; j++) {
-
-                if (this.inputTypes[j] === 'select') {
-
-                    var td = tab.getElementsByTagName("td")[j];
-                    var input = document.createElement('select');
-                    input.classList.add('form-control');
-                    input.innerHTML = '<option value="' + td.innerText + '">' + td.innerText + '</option>';
-
-                    for (si = 0; si < this.inputInfo[j].options.length; si++) {
-                        input.innerHTML = input.innerHTML +
-                            '<option value="' + this.inputInfo[j].options[si] + '">' + this.inputInfo[j].options[si] + '</option>';
-                    }
-
-                    td.innerText = '';
-                    td.appendChild(input);
-                }
-
-                else if (this.inputTypes[j] === 'text' || this.inputTypes[j] === 'number') {
-
-                    var td = tab.getElementsByTagName("td")[j];
-                    var input = document.createElement('input');
-                    input.classList.add('form-control');
-                    input.setAttribute('type', this.inputTypes[j]);
-                    input.setAttribute('value', td.innerText);
-                    td.innerText = '';
-                    td.appendChild(input);
-
-                }
-                else {
-                    alert('NOT A VALID INPUT TYPE');
-                };
-
-            };
-
-            var btSave = document.getElementById('save' + (activeRow - 2));
-            btSave.setAttribute('style', 'display:block;');
-            b.setAttribute('style', 'display:none;');
-
-        }; // end of CRUD operations
-    };
-
-    crudApp.createTable('hi');
-</script>
-
-<script>
-$(document).ready( function () {
-    $('#sampleTable').DataTable();
-    //$('#crudTable').DataTable();
-} );
-</script>
-
-
+    </body>
 </html>
-
-
