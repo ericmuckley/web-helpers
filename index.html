@@ -35,6 +35,9 @@
                 parent:'root',
                 classes: ['text-center'],
                 styles: {"padding": "100px", "margin": '20px', "border": '1px solid black', 'border-radius': '10px'},
+                children: [
+                    ["input", {classes: ["form-select", "m-5"]}], 
+                ]
             }); 
 
             dom.make("button", {

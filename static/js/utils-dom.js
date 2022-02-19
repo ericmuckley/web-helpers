@@ -52,6 +52,11 @@ const dom = {
         el.innerHTML = v;
       } else if (['id', 'name', 'type', 'href', 'target', 'text', 'value'].includes(k)) {
         el.setAttribute(k, v);
+      } else if (k === "children") {
+        for (let c of v){
+          const el_child = dom.make(c[0], c[1]);
+          el.appendChild(el_child);
+        };
       } else {
         alert(`No action performed for new component with info key: ${k}`);
       };
