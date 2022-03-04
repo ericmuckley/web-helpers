@@ -1,0 +1,136 @@
+
+.navbar-brand {
+  color: #0d6efd;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: 1rem;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar-toggler {
+  color: #6c757d;
+  top: .25rem;
+  right: 1rem;
+}
+.navbar-form-control {
+  padding: .75rem 1rem;
+  border-width: 0;
+  border-radius: 0;
+  outline: 0px solid rgba(0, 0, 0, .1) !important;
+  -webkit-appearance: none !important;
+  box-shadow: 1px 0 0 rgba(0, 0, 0, .25) !important;
+}
+.navbar-form-control:hover {
+  border-bottom: 3px solid #0d6efd;
+  margin-bottom: -3px;
+}
+.navbar .nav-link {
+  padding: 12px 20px 12px 20px;
+  margin: 0px 0px 0px 0px;
+  color: #0d6efd;
+}
+.navbar .nav-link:hover {
+  color: #0d6efd;
+  border-bottom: 3px solid #0d6efd;
+  margin-bottom: -3px;
+  background-color: #dee2e6;
+}
+
+
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    top: 5rem;
+  }
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #2470dc;
+}
+.sidebar .nav-link:hover {
+  font-weight: 500;
+  color: #2470dc;
+  border-right: 3px solid #2470dc;
+  padding-left: -3px;
+  background-color: #dee2e6;
+}
+/*
+.sidebar .nav-link.active {
+  color: #2470dc;
+}
+*/
+
+.sidebar-heading {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0px 15px 0px 15px;
+  margin: 20px 0px 5px 0px;
+  color: #6c757d;
+}
+.sidebar-heading:hover {
+  cursor: default;
+}
+
+
+
+
+
+
+
+/* Bootstrap 5 color codes
+
+$blue:    #0d6efd;
+$indigo:  #6610f2;
+$purple:  #6f42c1;
+$pink:    #d63384;
+$red:     #dc3545;
+$orange:  #fd7e14;
+$yellow:  #ffc107;
+$green:   #198754;
+$teal:    #20c997;
+$cyan:    #0dcaf0;
+
+$primary:       $blue;
+$secondary:     $gray-600;
+$success:       $green;
+$info:          $cyan;
+$warning:       $yellow;
+$danger:        $red;
+$light:         $gray-100;
+$dark:          $gray-900;
+
+$white:    #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black:    #000;
+
+*/
